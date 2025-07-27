@@ -1,0 +1,296 @@
+import React, { useState } from 'react';
+import { AppProvider, useApp } from './context/AppContext';
+
+// Simple Loading Spinner
+const LoadingSpinner = ({ size = 'medium', message = 'Loading...' }) => {
+  const sizeClasses = {
+    small: 'w-4 h-4',
+    medium: 'w-8 h-8',
+    large: 'w-12 h-12'
+  };
+
+  return (
+    <div className="flex flex-col items-center justify-center space-y-2">
+      <div className={`${sizeClasses[size]} border-4 border-blue-200 border-t-blue-600 rounded-full animate-spin`}></div>
+      {message && <p className="text-gray-600 text-sm">{message}</p>}
+    </div>
+  );
+};
+
+// Simple Button Component
+const Button = ({ children, onClick, disabled = false, size = 'medium', className = '' }) => {
+  const sizeClasses = {
+    small: 'px-3 py-1.5 text-sm',
+    medium: 'px-4 py-2 text-base',
+    large: 'px-6 py-3 text-lg'
+  };
+
+  return (
+    <button
+      onClick={onClick}
+      disabled={disabled}
+      className={`${sizeClasses[size]} bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors ${className}`}
+    >
+      {children}
+    </button>
+  );
+};
+
+// Simple Mock Login Component
+const MockLogin = () => {
+  const { login } = useApp();
+  
+  const handleMockLogin = () => {
+    const mockUser = {
+      firstName: 'Priya',
+      lastName: 'Sharma',
+      phoneNumber: '9876543210',
+      gradeTeaching: '3',
+      schoolName: 'Government Primary School',
+      district: 'Rajgarh',
+      state: 'Madhya Pradesh'
+    };
+    login(mockUser);
+  };
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-purple-50 flex items-center justify-center">
+      <div className="bg-white rounded-2xl shadow-xl p-8 max-w-md w-full mx-4">
+        <div className="text-center mb-8">
+          <div className="w-16 h-16 bg-blue-600 rounded-full flex items-center justify-center mx-auto mb-4">
+            <span className="text-2xl text-white">🎓</span>
+          </div>
+          <h1 className="text-2xl font-bold text-gray-900 mb-2">Welcome to Sahayak</h1>
+          <p className="text-gray-600">Your AI Teaching Assistant</p>
+        </div>
+        
+        <Button onClick={handleMockLogin} size="large" className="w-full">
+          🚀 Start Teaching Journey
+        </Button>
+      </div>
+    </div>
+  );
+};
+
+// Simple Curriculum Component
+const CreateCurriculum = () => {
+  const { user } = useApp();
+  const [selectedOption, setSelectedOption] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [curriculum, setCurriculum] = useState(null);
+
+  const generateCurriculum = async () => {
+    setLoading(true);
+    // Simulate API call
+    setTimeout(() => {
+      setCurriculum({
+        grade: user?.gradeTeaching,
+        subjects: ['Mathematics', 'English', 'Hindi', 'Science'],
+        generatedAt: new Date().toLocaleDateString()
+      });
+      setLoading(false);
+    }, 2000);
+  };
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <LoadingSpinner size="large" message="Generating your curriculum..." />
+      </div>
+    );
+  }
+
+  return (
+    <div className="space-y-8">
+      <div className="text-center">
+        <h1 className="text-3xl font-bold text-gray-900 mb-4">📚 Build Your Teaching Plan</h1>
+        <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+          Create a comprehensive curriculum tailored to your classroom needs.
+        </p>
+      </div>
+
+      {!curriculum ? (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div className="bg-white rounded-xl p-6 shadow-lg cursor-pointer hover:shadow-xl transition-shadow"
+               onClick={() => setSelectedOption('automatic')}>
+            <div className="text-4xl mb-4">🤖</div>
+            <h3 className="text-xl font-semibold text-gray-900 mb-3">Automatic Curriculum</h3>
+            <p className="text-gray-600 mb-6">Generate a complete year-long curriculum based on your grade level</p>
+            {selectedOption === 'automatic' && (
+              <Button onClick={generateCurriculum} size="large">
+                🚀 Generate Curriculum
+              </Button>
+            )}
+          </div>
+
+          <div className="bg-white rounded-xl p-6 shadow-lg cursor-pointer hover:shadow-xl transition-shadow"
+               onClick={() => setSelectedOption('custom')}>
+            <div className="text-4xl mb-4">✏️</div>
+            <h3 className="text-xl font-semibold text-gray-900 mb-3">Custom Curriculum</h3>
+            <p className="text-gray-600 mb-6">Build your own curriculum by selecting specific topics and subjects</p>
+            {selectedOption === 'custom' && (
+              <Button onClick={generateCurriculum} size="large">
+                🎯 Create Custom Plan
+              </Button>
+            )}
+          </div>
+        </div>
+      ) : (
+        <div className="bg-white rounded-xl p-8 shadow-lg">
+          <h2 className="text-2xl font-bold text-gray-900 mb-6">
+            📋 Grade {curriculum.grade} Curriculum
+          </h2>
+          <p className="text-gray-600 mb-6">Generated on {curriculum.generatedAt}</p>
+          
+          <div className="grid grid-cols-2 gap-4">
+            {curriculum.subjects.map((subject, index) => (
+              <div key={index} className="p-4 bg-gray-50 rounded-lg">
+                <h3 className="font-semibold text-gray-800">{subject}</h3>
+                <p className="text-sm text-gray-600">Topics and activities included</p>
+              </div>
+            ))}
+          </div>
+          
+          <div className="mt-6">
+            <Button onClick={() => setCurriculum(null)} className="mr-4">
+              ✨ Create New
+            </Button>
+            <Button onClick={() => window.print()}>
+              🖨️ Print
+            </Button>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
+// Enhanced Dashboard component
+const Dashboard = () => {
+  const { user, logout } = useApp();
+  const [currentView, setCurrentView] = useState('dashboard');
+
+  const menuItems = [
+    { id: 'dashboard', title: 'Dashboard', icon: '🏠' },
+    { id: 'curriculum', title: 'Create Curriculum', icon: '📚' },
+    { id: 'learn', title: 'Learn Concept', icon: '🧠' },
+    { id: 'prepare', title: 'Prepare Lessons', icon: '📝' },
+    { id: 'ai', title: 'AI Assistant', icon: '🤖' }
+  ];
+
+  const renderContent = () => {
+    if (currentView === 'curriculum') {
+      return <CreateCurriculum />;
+    }
+    
+    return (
+      <div>
+        <div className="mb-8">
+          <h2 className="text-3xl font-bold text-gray-900 mb-2">
+            Welcome back, {user?.firstName}! 👋
+          </h2>
+          <p className="text-gray-600">
+            Grade {user?.gradeTeaching} Teacher at {user?.schoolName}
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+          {menuItems.slice(1).map((item) => (
+            <div 
+              key={item.id} 
+              className="bg-white rounded-xl p-6 shadow-lg hover:shadow-xl transition-shadow cursor-pointer"
+              onClick={() => setCurrentView(item.id)}
+            >
+              <div className="text-3xl mb-4">{item.icon}</div>
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">{item.title}</h3>
+              <p className="text-gray-600 text-sm">Click to explore this feature</p>
+            </div>
+          ))}
+        </div>
+
+        <div className="bg-white rounded-xl p-8 shadow-lg">
+          <h3 className="text-xl font-semibold text-gray-900 mb-4">Your Profile</h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+            <div><span className="font-medium">Name:</span> {user?.firstName} {user?.lastName}</div>
+            <div><span className="font-medium">Grade Teaching:</span> Class {user?.gradeTeaching}</div>
+            <div><span className="font-medium">School:</span> {user?.schoolName}</div>
+            <div><span className="font-medium">District:</span> {user?.district}</div>
+            <div><span className="font-medium">Phone:</span> {user?.phoneNumber}</div>
+          </div>
+        </div>
+      </div>
+    );
+  };
+
+  return (
+    <div className="min-h-screen bg-gray-50">
+      <header className="bg-white shadow-sm border-b border-gray-200">
+        <div className="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
+          <div className="flex items-center space-x-4">
+            <div className="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center">
+              <span className="text-white font-bold">🎓</span>
+            </div>
+            <div>
+              <h1 className="text-xl font-bold text-gray-900">Sahayak</h1>
+              <p className="text-sm text-gray-600">Teaching Assistant</p>
+            </div>
+            
+            <nav className="hidden md:flex space-x-1 ml-8">
+              {menuItems.map((item) => (
+                <button
+                  key={item.id}
+                  onClick={() => setCurrentView(item.id)}
+                  className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+                    currentView === item.id 
+                      ? 'bg-blue-100 text-blue-700' 
+                      : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
+                  }`}
+                >
+                  {item.icon} {item.title}
+                </button>
+              ))}
+            </nav>
+          </div>
+          
+          <button
+            onClick={logout}
+            className="text-gray-600 hover:text-red-600 font-medium"
+          >
+            Logout
+          </button>
+        </div>
+      </header>
+
+      <main className="max-w-7xl mx-auto px-4 py-8">
+        {renderContent()}
+      </main>
+    </div>
+  );
+};
+
+// Main App component
+const AppContent = () => {
+  const { isAuthenticated, loading } = useApp();
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <LoadingSpinner size="large" message="Loading Sahayak..." />
+      </div>
+    );
+  }
+
+  return isAuthenticated ? <Dashboard /> : <MockLogin />;
+};
+
+function App() {
+  return (
+    <div className="App">
+      <AppProvider>
+        <AppContent />
+      </AppProvider>
+    </div>
+  );
+}
+
+export default App;
