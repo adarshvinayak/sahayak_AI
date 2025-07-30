@@ -40,8 +40,8 @@ Frontend/sahayak/
 │   └── utils/               # Utility functions and constants
 ├── public/
 │   └── assets/
-│       └── ncert-books/     # NCERT curriculum PDFs
-└── firebase.json           # Firebase hosting configuration
+│       └── books/           # curriculum books PDFs
+└── firebase.json            # Firebase hosting configuration
 ```
 
 ### Backend (FastAPI Application)
@@ -50,7 +50,7 @@ Backend/agentic_ai/
 ├── root_agent/
 │   ├── agent.py             # Main AI agent orchestrator
 │   ├── fastapi_endpoint.py  # FastAPI server with all endpoints
-│   ├── rag_agent.py         # RAG agents for NCERT/KTS curriculum
+│   ├── rag_agent.py         # RAG agents for curriculum books
 │   ├── search_agent.py      # Web search capabilities
 │   ├── imagen_agent.py      # AI image generation
 │   ├── tts.py               # Text-to-speech functionality
@@ -66,16 +66,16 @@ Backend/agentic_ai/
 - **Smart Agent Orchestration**: Utilizes Google's ADK (Agent Development Kit) to route queries to appropriate specialized agents
 - **Multi-Agent System**: 
   - Root Agent: Query dispatcher and coordinator
-  - RAG Agents: NCERT and KTS curriculum-specific knowledge retrieval
+  - RAG Agents: Curriculum-specific knowledge retrieval
   - Search Agent: Real-time web search capabilities
   - Imagen Agent: Educational diagram and image generation
 
 ### 📚 Curriculum & Lesson Planning
 - **Intelligent Schedule Generation**: AI analyzes curriculum content to create optimal 5-day lesson plans
 - **Multi-Grade Support**: Handles simultaneous teaching across grades 2-12
-- **Curriculum Integration**: 
+- **Current Curriculum Integration**: 
   - NCERT (National Council of Educational Research and Training)
-  - KTS (Kendriya Vidyalaya Sangathan)
+  - KTS (Karnataka Textbook Society)
 - **Resource Management**: Direct access to curriculum PDFs and supplementary materials
 
 ### 🌐 Multilingual Support
@@ -441,7 +441,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 - **Google Cloud**: AI and infrastructure services
 - **Firebase**: Authentication and hosting platform
-- **NCERT**: Educational curriculum content
+- **NCERT & KTS**: Educational curriculum content
 - **React Community**: Frontend framework and ecosystem
 - **FastAPI Community**: Backend framework and tools
 
