@@ -453,9 +453,8 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - **Community**: Join our teacher community forums
 
 ### Contact Information
-- **Project Lead**: [Your Name]
-- **Email**: [contact@sahayakai.edu]
-- **Website**: [https://sahayakai.edu]
+- **Project Lead**: [Adarsh Vinayak]
+- **Email**: [adarshvinayak@gmail.com]
 
 ---
 
