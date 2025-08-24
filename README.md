@@ -1,5 +1,7 @@
 # 🎓 SahayakAI - Multi-Grade Teaching Assistant
 
+https://maverics4agenticai.web.app/
+
 **An AI-powered educational platform designed specifically for rural Indian teachers managing multi-grade classrooms**
 
 [![Firebase](https://img.shields.io/badge/Frontend-Firebase-orange)](https://console.firebase.google.com/project/maverics4agenticai)
